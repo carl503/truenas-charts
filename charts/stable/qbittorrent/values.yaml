@@ -1,0 +1,59 @@
+image:
+  repository: docker.io/binhex/arch-qbittorrentvpn
+  pullPolicy: IfNotPresent
+  tag: v4.4.3.1@sha256:1c4babf95744d0c77f82db444ddf91f7792d1438242b84a52df9eb7bb3d01470
+
+securityContext:
+  readOnlyRootFilesystem: false
+
+env:
+  VPN_ENABLED: yes
+  VPN_PROV: pia
+  VPN_CLIENT: wireguard
+  STRICT_PORT_FORWARD: yes
+  ENABLE_PRIVOXY: yes
+  LAN_NETWORK: 192.168.1.0/24
+
+service:
+  main:
+    ports:
+      main:
+        port: 8080
+        targetPort: 8080
+
+  torrent:
+    enabled: true
+    ports:
+      torrent:
+        enabled: true
+        port: 6881
+        targetPort: 6881
+
+  torrentudp:
+    enabled: true
+    ports:
+      torrentudp:
+        enabled: true
+        port: 6881
+        targetPort: 6881
+        protocol: UDP
+
+  privoxy:
+    ports:
+      privoxy:
+        enabled: true
+        port: 8118
+        targetPort: 8118
+        protocol: HTTP
+
+persistence:
+  config:
+    enabled: true
+    mountPath: "/config"
+  
+  data:
+    enabled: true
+    mountPath: "/data"
+
+portal:
+  enabled: true
